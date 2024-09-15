@@ -16,10 +16,10 @@ def obtenerModelo(method,facesData,labels):
 	print("Tiempo de entrenamiento ( "+method+" ): ", tiempoEntrenamiento)
 
 	# Almacenando el modelo obtenido
-	emotion_recognizer.write("modelo2"+method+".xml") #Almacena el modelo obtenido en un archivo XML en la carpeta del proyecto
+	emotion_recognizer.write("modelo3"+method+".xml") #Almacena el modelo obtenido en un archivo XML en la carpeta del proyecto
 
 dataPath = 'C:/Users/carolina/Documents/VS Code/Reconocimiento_emociones_modelo/Data' #Cambia a la ruta donde hayas almacenado Data
-emotionsList = os.listdir(dataPath)
+emotionsList = os.listdir(dataPath) #Cuenta la cantidad de emociones en la carpeta Data
 print('Lista de emociones: ', emotionsList)
 
 labels = []
@@ -39,5 +39,5 @@ for nameDir in emotionsList:
 	label = label + 1
 
 #obtenerModelo('EigenFaces',facesData,labels)
-obtenerModelo('FisherFaces',facesData,labels)
-#obtenerModelo('LBPH',facesData,labels)
+#obtenerModelo('FisherFaces',facesData,labels)
+obtenerModelo('LBPH',facesData,labels)

@@ -16,3 +16,6 @@ OmesTutorials2020 - 7 RECONOCIMIENTO DE EMOCIONES:
 3. Ejecuta el archivo `captura_emociones.py`.
 4. Ejecuta el archivo `entrenamiento.py`.
 5. Ejecuta el archivo `reconocimiento.py`.
+
+### Ejemplo de funcionamiento:
+![Ejemplo de funcionamiento](Demostracion.gif)

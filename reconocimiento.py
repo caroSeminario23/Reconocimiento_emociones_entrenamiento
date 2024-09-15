@@ -10,6 +10,9 @@ def emotionImage(emotion):
 	if emotion == 'Tristeza': image = cv2.imread('Emojis/Tristeza.jpg')
 	if emotion == 'Ansiedad': image = cv2.imread('Emojis/Ansiedad.jpg')
 	if emotion == 'Depresion': image = cv2.imread('Emojis/Depresion.jpg')
+	#if emotion == 'Disgusto': image = cv2.imread('Emojis/Disgusto.jpg')
+	#if emotion == 'Miedo': image = cv2.imread('Emojis/Miedo.jpg')
+	#if emotion == 'Neutral': image = cv2.imread('Emojis/Neutral.jpg')
 	return image
 
 # ----------- Métodos usados para el entrenamiento y lectura del modelo ----------
