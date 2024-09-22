@@ -12,7 +12,7 @@ input_details = interpreter.get_input_details()
 output_details = interpreter.get_output_details()
 
 # Iniciar la captura de video desde un archivo
-cap = cv2.VideoCapture(r'C:\Users\carolina\Documents\VS Code\Reconocimiento_emociones_modelo\Videos\Depresion\video1.mp4')  # Cambia esto por la ruta de tu video
+cap = cv2.VideoCapture(r'C:\Users\carolina\Documents\VS Code\Reconocimiento_emociones_modelo\Videos\Ansiedad\video20.mp4')  # Cambia esto por la ruta de tu video
 
 # Obtener el tamaño del video
 video_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))

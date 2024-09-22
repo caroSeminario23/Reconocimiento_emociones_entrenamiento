@@ -8,6 +8,7 @@ OmesTutorials2020 - 7 RECONOCIMIENTO DE EMOCIONES:
 - Eigenfaces
 - Fisherfaces
 - LBPH
+- CNN con Tensorflow Lite
 
 ### Pasos para su ejecución:
 1. Crea un entorno virtual.
@@ -17,5 +18,11 @@ OmesTutorials2020 - 7 RECONOCIMIENTO DE EMOCIONES:
 4. Ejecuta el archivo `entrenamiento.py`.
 5. Ejecuta el archivo `reconocimiento.py`.
 
-### Ejemplo de funcionamiento:
-![Ejemplo de funcionamiento](Demostracion.gif)
+### Ejemplo de funcionamiento (Modelos 1, 2 y 3):
+![Ejemplo de funcionamiento](Pruebas/Demostracion.gif)
+
+### Ejemplo de funcionamiento (CNN):
+![Ejemplo de funcionamiento2](Pruebas/Demostracion2.png)
+![Ejemplo de funcionamiento2](Pruebas/Demostracion3.png)
+![Ejemplo de funcionamiento2](Pruebas/Demostracion4.png)
+![Ejemplo de funcionamiento2](Pruebas/Demostracion5.png)
