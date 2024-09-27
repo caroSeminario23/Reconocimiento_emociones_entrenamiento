@@ -75,6 +75,11 @@ while True:
 
         # Procesar la salida
         estado = "Inestable" if output_data[0][0] > 0.5 else "Estable"
+        print(estado, output_data[0][0])
+
+        # Guardar el estado y precisión en un archivo llamado 'estado.csv'
+        with open('estado.csv', 'a') as f: # 'a' para añadir al archivo existente
+            f.write(f'{estado},{output_data[0][0]}\n') # Escribir el estado y la precisión
 
         # Dibujar un rectángulo alrededor del rostro y mostrar el estado
         cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
