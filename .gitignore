@@ -8,3 +8,6 @@ Otros_recursos
 Imagenes_con_malla
 JSON_de_imagenes
 estado.csv
+model_estable_inestable_478_landmarks.h5
+model_estable_inestable.h5
+model_estable_inestable.tflite

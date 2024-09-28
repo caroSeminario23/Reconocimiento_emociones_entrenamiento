@@ -8,9 +8,9 @@ mp_drawing_styles = mp.solutions.drawing_styles # Estilos de dibujo predefinidos
 mp_face_mesh = mp.solutions.face_mesh # Módulo de malla facial
 
 # Directorio de imágenes a procesar
-image_dir = r'C:\Users\carolina\Documents\VS Code\Reconocimiento_emociones_modelo\Imagenes\Fotogramas\Entrenamiento\Estable'
-output_image_dir = r'C:\Users\carolina\Documents\VS Code\Reconocimiento_emociones_modelo\Puntos_faciales\Imagenes_con_malla\Entrenamiento\Estable'
-output_json_dir = r'C:\Users\carolina\Documents\VS Code\Reconocimiento_emociones_modelo\Puntos_faciales\JSON_de_imagenes\Entrenamiento\Estable'
+image_dir = r'C:\Users\carolina\Documents\VS Code\Reconocimiento_emociones_modelo\Imagenes\Fotogramas\Entrenamiento\Inestable'
+output_image_dir = r'C:\Users\carolina\Documents\VS Code\Reconocimiento_emociones_modelo\Puntos_faciales\Imagenes_con_malla\Entrenamiento\Inestable'
+output_json_dir = r'C:\Users\carolina\Documents\VS Code\Reconocimiento_emociones_modelo\Puntos_faciales\JSON_de_imagenes\Entrenamiento\Inestable'
 
 # Crear directorios de salida si no existen
 os.makedirs(output_image_dir, exist_ok=True)
