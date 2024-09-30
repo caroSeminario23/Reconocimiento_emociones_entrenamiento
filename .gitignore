@@ -1,7 +1,7 @@
 venv
 venv311
 Modelo_red_neuronal/Fotogramas
-Modelo_red_neuronal/Modelos
+Modelo_red_neuronal/Modelos/model_normal_alerta.tflite
 Modelo_red_neuronal/Fotogramas.zip
 Modelos_OpenCV/Imagenes_entrenamiento
 Modelos_OpenCV/Modelos
