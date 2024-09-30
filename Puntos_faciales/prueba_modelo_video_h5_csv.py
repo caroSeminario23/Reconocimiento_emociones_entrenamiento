@@ -3,6 +3,8 @@ import cv2
 import numpy as np
 import mediapipe as mp
 from tensorflow.keras.models import load_model
+import csv
+from datetime import datetime
 
 # Ruta del modelo
 model_path = 'Puntos_faciales/Modelos_pf/model_estable_inestable.h5'
@@ -24,7 +26,7 @@ mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 
 # Ruta del video
-video_path = r'C:\Users\carolina\Documents\VS Code\Reconocimiento_emociones_modelo\Videos\Ansiedad\video6.mp4'
+video_path = r'C:\Users\carolina\Documents\VS Code\Reconocimiento_emociones_modelo\Videos\Ansiedad\video9.mp4'
 
 # Iniciar la captura de video desde un archivo
 cap = cv2.VideoCapture(video_path)
@@ -35,11 +37,29 @@ if not cap.isOpened():
 
 print("Video iniciado correctamente.")
 
+# Obtener las dimensiones de la pantalla
+screen_width = 1920  # Ajusta esto al ancho de tu pantalla
+screen_height = 1080  # Ajusta esto al alto de tu pantalla
+
+# Función para escribir resultados en CSV
+def write_to_csv(filename, data):
+    file_exists = os.path.isfile(filename)
+    with open(filename, 'a', newline='') as csvfile:
+        writer = csv.writer(csvfile)
+        if not file_exists:
+            writer.writerow(['Fecha y Hora', 'Estado', 'Valor de Predicción'])
+        writer.writerow(data)
+
 while cap.isOpened():
     ret, frame = cap.read()
     if not ret:
         print("Error al leer el cuadro del video.")
         break
+
+    # Redimensionar el frame si es más grande que la pantalla
+    if frame.shape[1] > screen_width or frame.shape[0] > screen_height:
+        scale = min(screen_width / frame.shape[1], screen_height / frame.shape[0])
+        frame = cv2.resize(frame, None, fx=scale, fy=scale)
 
     # Convertir la imagen a RGB
     image_rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -77,22 +97,27 @@ while cap.isOpened():
             # Realizar la inferencia
             output_data = model.predict(points_input)
 
-            # Imprimir los resultados de la inferencia
-            print("Resultados de la inferencia:", output_data)
+            # Obtener el valor de predicción
+            pred_value = output_data[0][0]  # Asumiendo que el modelo devuelve un solo valor
 
-            # Obtener la predicción
-            pred = np.argmax(output_data)
-
-            # Definir la etiqueta y el color del rectángulo
-            label = 'Estable' if pred == 0 else 'Inestable'
-            color = (0, 255, 0) if pred == 0 else (0, 0, 255)
+            # Determinar la etiqueta basada en el valor de predicción
+            if pred_value < 0.5:
+                label = 'Estable'
+                color = (0, 255, 0)  # Verde para estable
+            else:
+                label = 'Inestable'
+                color = (0, 0, 255)  # Rojo para inestable
 
             # Dibujar el rectángulo y la etiqueta en el cuadro
             h, w, _ = frame.shape
             x_min, y_min = int(min([p[0] for p in points]) * w), int(min([p[1] for p in points]) * h)
             x_max, y_max = int(max([p[0] for p in points]) * w), int(max([p[1] for p in points]) * h)
             cv2.rectangle(frame, (x_min, y_min), (x_max, y_max), color, 2)
-            cv2.putText(frame, label, (x_min, y_min-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, color, 2)
+            cv2.putText(frame, f"{label} ({pred_value:.2f})", (x_min, y_min-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, color, 2)
+
+            # Guardar resultados en CSV
+            current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            write_to_csv('resultados_estado.csv', [current_time, label, pred_value])
 
     else:
         print("No se detectaron puntos faciales.")
