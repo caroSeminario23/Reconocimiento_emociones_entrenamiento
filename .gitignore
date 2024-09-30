@@ -8,6 +8,6 @@ Modelos_OpenCV/Modelos
 Otros_recursos
 Puntos_faciales/Imagenes_con_malla
 Puntos_faciales/JSON_de_imagenes
-Puntos_faciales/Modelos_pf
+Puntos_faciales/Modelos_pf/model_estable_inestable_478_landmarks.h5
 Videos
 estado.csv
