@@ -31,7 +31,9 @@ OmesTutorials2020 - 7 RECONOCIMIENTO DE EMOCIONES:
 </div>
 
 ### Ejemplo de funcionamiento (Modelo 5):
-<img src="Pruebas/Demostracion6.png" alt="Ejemplo de funcionamiento2" width="200"/>
-<img src="Pruebas/Demostracion7.png" alt="Ejemplo de funcionamiento2" width="200"/>
-<img src="Pruebas/Demostracion8.png" alt="Ejemplo de funcionamiento2" width="200"/>
-<img src="Pruebas/Demostracion9.png" alt="Ejemplo de funcionamiento2" width="200"/>
+<div style="display: flex; flex-wrap: wrap;">
+    <img src="Pruebas/Demostracion6.png" alt="Ejemplo de funcionamiento2" width="200"/>
+    <img src="Pruebas/Demostracion7.png" alt="Ejemplo de funcionamiento2" width="200"/>
+    <img src="Pruebas/Demostracion8.png" alt="Ejemplo de funcionamiento2" width="200"/>
+    <img src="Pruebas/Demostracion9.png" alt="Ejemplo de funcionamiento2" width="200"/>
+</div>
