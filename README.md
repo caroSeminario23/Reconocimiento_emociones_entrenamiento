@@ -5,10 +5,11 @@ OmesTutorials2020 - 7 RECONOCIMIENTO DE EMOCIONES:
 [Enlace al repositorio base](https://github.com/GabySol/OmesTutorials2020/tree/master)
 
 ### Modelos:
-- Eigenfaces
-- Fisherfaces
-- LBPH
-- CNN con Tensorflow Lite
+1. Eigenfaces
+2. Fisherfaces
+3. LBPH
+4. CNN con Tensorflow Lite
+5. CNN con Tensorflow Lite utilizando puntos faciales y Mediapipe
 
 ### Pasos para su ejecución:
 1. Crea un entorno virtual.
@@ -21,8 +22,14 @@ OmesTutorials2020 - 7 RECONOCIMIENTO DE EMOCIONES:
 ### Ejemplo de funcionamiento (Modelos 1, 2 y 3):
 ![Ejemplo de funcionamiento](Pruebas/Demostracion.gif)
 
-### Ejemplo de funcionamiento (CNN):
-![Ejemplo de funcionamiento2](Pruebas/Demostracion2.png)
-![Ejemplo de funcionamiento2](Pruebas/Demostracion3.png)
-![Ejemplo de funcionamiento2](Pruebas/Demostracion4.png)
-![Ejemplo de funcionamiento2](Pruebas/Demostracion5.png)
+### Ejemplo de funcionamiento (Modelo 4):
+<img src="Pruebas/Demostracion2.png" alt="Ejemplo de funcionamiento2" width="200"/>
+<img src="Pruebas/Demostracion3.png" alt="Ejemplo de funcionamiento2" width="200"/>
+<img src="Pruebas/Demostracion4.png" alt="Ejemplo de funcionamiento2" width="200"/>
+<img src="Pruebas/Demostracion5.png" alt="Ejemplo de funcionamiento2" width="200"/>
+
+### Ejemplo de funcionamiento (Modelo 5):
+<img src="Pruebas/Demostracion6.png" alt="Ejemplo de funcionamiento2" width="200"/>
+<img src="Pruebas/Demostracion7.png" alt="Ejemplo de funcionamiento2" width="200"/>
+<img src="Pruebas/Demostracion8.png" alt="Ejemplo de funcionamiento2" width="200"/>
+<img src="Pruebas/Demostracion9.png" alt="Ejemplo de funcionamiento2" width="200"/>
