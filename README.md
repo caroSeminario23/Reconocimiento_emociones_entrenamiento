@@ -46,5 +46,22 @@ OmesTutorials2020 - 7 RECONOCIMIENTO DE EMOCIONES:
     <img src="Pruebas/Demostracion13.png" alt="Ejemplo de funcionamiento13" width="200"/>
 </div>
 
-## Modelo lógico de la BD para almacenar los resultados
+## Modelo lógico de la BD para almacenar los resultados (SQLite)
 ![base de datos](Database/modelo_logico.png)
+
+## Resultados de procesamiento de la data temporal (sesión de análisis)
+*Se muestra 5 registros por tabla*
+1. Archivo Resultados_temp.csv
+![Tabla 1](Pruebas/Demostracion14.png)
+
+2. Archivo Estado_sm.csv
+![Tabla 2](Pruebas/Demostracion15.png)
+
+3. Archivo Resultado_sesion.csv
+![Tabla 3](Pruebas/Demostracion16.png)
+
+4. Archivo Detalle_resultado.csv
+![Tabla 4](Pruebas/Demostracion17.png)
+
+5. Archivo Lote_fotogramas.csv
+![Tabla 5](Pruebas/Demostracion18.png)
