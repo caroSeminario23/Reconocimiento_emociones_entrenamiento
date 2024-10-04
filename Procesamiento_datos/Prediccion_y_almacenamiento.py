@@ -26,7 +26,7 @@ mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 
 # Ruta del video
-video_path = r'C:\Users\carolina\Documents\VS Code\Reconocimiento_emociones_modelo\Videos\Ansiedad\video5.mp4'
+video_path = r'C:\Users\carolina\Documents\VS Code\Reconocimiento_emociones_modelo\Videos\Depresion\video1.mp4'
 
 # Iniciar la captura de video desde un archivo
 cap = cv2.VideoCapture(video_path)
