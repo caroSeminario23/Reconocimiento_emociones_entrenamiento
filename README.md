@@ -25,15 +25,26 @@ OmesTutorials2020 - 7 RECONOCIMIENTO DE EMOCIONES:
 ### Ejemplo de funcionamiento (Modelo 4):
 <div style="display: flex; flex-wrap: wrap;">
     <img src="Pruebas/Demostracion2.png" alt="Ejemplo de funcionamiento2" width="200"/>
-    <img src="Pruebas/Demostracion3.png" alt="Ejemplo de funcionamiento2" width="200"/>
-    <img src="Pruebas/Demostracion4.png" alt="Ejemplo de funcionamiento2" width="200"/>
-    <img src="Pruebas/Demostracion5.png" alt="Ejemplo de funcionamiento2" width="200"/>
+    <img src="Pruebas/Demostracion3.png" alt="Ejemplo de funcionamiento3" width="200"/>
+    <img src="Pruebas/Demostracion4.png" alt="Ejemplo de funcionamiento4" width="200"/>
+    <img src="Pruebas/Demostracion5.png" alt="Ejemplo de funcionamiento5" width="200"/>
 </div>
 
 ### Ejemplo de funcionamiento (Modelo 5):
 <div style="display: flex; flex-wrap: wrap;">
-    <img src="Pruebas/Demostracion6.png" alt="Ejemplo de funcionamiento2" width="200"/>
-    <img src="Pruebas/Demostracion7.png" alt="Ejemplo de funcionamiento2" width="200"/>
-    <img src="Pruebas/Demostracion8.png" alt="Ejemplo de funcionamiento2" width="200"/>
-    <img src="Pruebas/Demostracion9.png" alt="Ejemplo de funcionamiento2" width="200"/>
+    <img src="Pruebas/Demostracion6.png" alt="Ejemplo de funcionamiento6" width="200"/>
+    <img src="Pruebas/Demostracion7.png" alt="Ejemplo de funcionamiento7" width="200"/>
+    <img src="Pruebas/Demostracion8.png" alt="Ejemplo de funcionamiento8" width="200"/>
+    <img src="Pruebas/Demostracion9.png" alt="Ejemplo de funcionamiento9" width="200"/>
 </div>
+
+## Jerarquización de estado inestable
+<div style="display: flex; flex-wrap: wrap;">
+    <img src="Pruebas/Demostracion10.png" alt="Ejemplo de funcionamiento10" width="200"/>
+    <img src="Pruebas/Demostracion11.png" alt="Ejemplo de funcionamiento11" width="200"/>
+    <img src="Pruebas/Demostracion12.png" alt="Ejemplo de funcionamiento12" width="200"/>
+    <img src="Pruebas/Demostracion13.png" alt="Ejemplo de funcionamiento13" width="200"/>
+</div>
+
+## Modelo lógico de la BD para almacenar los resultados
+![base de datos](Database/modelo_logico.png)
