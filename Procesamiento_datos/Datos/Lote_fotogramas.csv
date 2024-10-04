@@ -1,0 +1,2 @@
+id_lote,n_fotogramas,valor_min_pred,valor_max_pred,valor_prom_pred,id_estado_sm,fecha,hora_inicio,hora_fin,prob_error_pred,id_res_sesion
+0,388,0.235,0.739,0.527,1,2024-10-04,05:11:33,05:11:57,0.345,0

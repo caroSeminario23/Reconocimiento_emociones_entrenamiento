@@ -2,11 +2,11 @@
 CREATE TABLE Detalle_resultado
 (
   id_res_sesion  INTEGER NOT NULL,
-  id_resultado   INTEGER NOT NULL,
+  id_estado_sm   INTEGER NOT NULL,
   -- de la sesión
   por_frecuencia REAL    NOT NULL,
-  PRIMARY KEY (id_res_sesion, id_resultado),
-  FOREIGN KEY (id_resultado) REFERENCES Estado_sm (id_estado_sm),
+  PRIMARY KEY (id_res_sesion, id_estado_sm),
+  FOREIGN KEY (id_estado_sm) REFERENCES Estado_sm (id_estado_sm),
   FOREIGN KEY (id_res_sesion) REFERENCES Resultado_sesion (id_res_sesion)
 );
 

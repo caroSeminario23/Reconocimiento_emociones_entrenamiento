@@ -4,8 +4,8 @@
   "settings": {
     "width": 2000,
     "height": 2000,
-    "scrollTop": -535,
-    "scrollLeft": -252,
+    "scrollTop": -1010,
+    "scrollLeft": -363,
     "zoomLevel": 0.88,
     "show": 431,
     "database": 32,
@@ -963,20 +963,20 @@
       "IUJeQ7SgaeIawZ5ybUAqD": {
         "id": "IUJeQ7SgaeIawZ5ybUAqD",
         "tableId": "gw-qT8oHHyxmEP9SHGlX5",
-        "name": "id_resultado",
+        "name": "id_estado_sm",
         "comment": "",
         "dataType": "INTEGER",
         "default": "",
         "options": 10,
         "ui": {
           "keys": 3,
-          "widthName": 66,
+          "widthName": 73,
           "widthComment": 60,
           "widthDataType": 60,
           "widthDefault": 60
         },
         "meta": {
-          "updateAt": 1728029668362,
+          "updateAt": 1728078682547,
           "createAt": 1728029610467
         }
       },
@@ -1799,7 +1799,7 @@
       -1,
       {
         "options(notNull)": 1728029610464,
-        "name": 1728029610464,
+        "name": 1728078682540,
         "dataType": 1728029610464,
         "default": 1728029610464,
         "comment": 1728029610464,

@@ -1,120 +1,121 @@
-# Leer el archivo "Resultados_temp.csv" y asignarlo a una variable llamada "resultados_temporales"
+import pandas as pd
 import csv
 from datetime import datetime
-import pandas as pd
 
-
-resultados_temporales = pd.read_csv('Procesamiento_datos/Datos/Resultados_temp.csv')
+# Leer el archivo "Resultados_temp.csv" y asignarlo a una variable llamada "resultados_temp"
+resultados_temp = pd.read_csv('Procesamiento_datos/Datos/Resultados_temp.csv')
 
 # Almacenar la fecha, hora de inicio (del primer registro) y la hora de fin (del último registro) en variables
-fecha = resultados_temporales['fecha'][0]
-hora_inicio = resultados_temporales['hora'][0]
-hora_fin = resultados_temporales['hora'][len(resultados_temporales)-1]
+fecha = resultados_temp['fecha'].iloc[0]
+hora_inicio = resultados_temp['hora'].iloc[0]
+hora_fin = resultados_temp['hora'].iloc[-1]
 
 # Identificar el último valor de la columna 'id_res_sesion' en el archivo "Resultado_sesion.csv" y asignarle el siguiente valor
 try:
-    with open('Procesamiento_datos/Datos/Resultado_sesion.csv', 'r') as csvfile:
-        reader = csv.DictReader(csvfile)
-        ids = [int(row['id_res_sesion']) for row in reader]
-        id_res_sesion = max(ids) + 1 if ids else 0
+    resultado_sesion = pd.read_csv('Procesamiento_datos/Datos/Resultado_sesion.csv')
+    id_res_sesion = resultado_sesion['id_res_sesion'].max() + 1 if not resultado_sesion.empty else 0
 except FileNotFoundError:
     id_res_sesion = 0
 
-id_paciente = 1  # ID del paciente (asumido)
+id_paciente = 0  # ID del paciente (asumido)
 
 # Guardar la fecha, hora de inicio y hora de fin en un archivo CSV llamado "Resultado_sesion.csv"
-with open('Procesamiento_datos/Datos/Resultado_sesion.csv', 'a', newline='') as csvfile:  # Cambiar a modo adición ('a')
-    writer = csv.writer(csvfile)
+nuevo_resultado_sesion = pd.DataFrame({
+    'id_res_sesion': [id_res_sesion],
+    'id_paciente': [id_paciente],
+    'fecha': [fecha],
+    'hora_inicio': [hora_inicio],
+    'hora_fin': [hora_fin]
+})
+nuevo_resultado_sesion.to_csv('Procesamiento_datos/Datos/Resultado_sesion.csv', mode='a', index=False, header=not 'resultado_sesion' in locals())
 
-    # Escribir los encabezados solo si el archivo está vacío
-    if csvfile.tell() == 0:
-        writer.writerow(['id_res_sesion', 'id_paciente', 'fecha', 'hora_inicio', 'hora_fin'])
-
-    # Escribir los datos en el archivo CSV
-    writer.writerow([id_res_sesion, id_paciente, fecha, hora_inicio, hora_fin])
+# Leer el último id_lote del archivo Lote_fotogramas.csv si existe
+try:
+    df_lote_existente = pd.read_csv('Procesamiento_datos/Datos/Lote_fotogramas.csv')
+    ultimo_id_lote = df_lote_existente['id_lote'].max() if not df_lote_existente.empty else -1
+except FileNotFoundError:
+    ultimo_id_lote = -1
 
 # Determinar el número de fotogramas procesados, el valor mínimo, máximo y promedio de cada bloque de 1 minuto
-# Dividir los registros en bloques de 1 minuto
-resultados_temporales['hora'] = pd.to_datetime(resultados_temporales['hora']) # Convertir la columna 'hora' a tipo datetime
-resultados_temporales['minuto'] = resultados_temporales['hora'].dt.minute # Extraer el minuto de la hora
-resultados_temporales['bloque'] = resultados_temporales['hora'].dt.hour * 60 + resultados_temporales['minuto'] # Calcular el bloque de 1 minuto
-bloques = resultados_temporales.groupby('bloque') # Agrupar los registros por bloque
+resultados_temp['hora'] = pd.to_datetime(resultados_temp['hora'], format='%H:%M:%S')
+hora_inicio_sesion = resultados_temp['hora'].min()
+resultados_temp['minutos_desde_inicio'] = (resultados_temp['hora'] - hora_inicio_sesion).dt.total_seconds() / 60
+resultados_temp['bloque'] = resultados_temp['minutos_desde_inicio'].astype(int)
+
+bloques = resultados_temp.groupby('bloque')
+
+# Leer el archivo Estado_sm.csv una sola vez
+estados_sm = pd.read_csv('Procesamiento_datos/Datos/Estado_sm.csv')
 
 # Crear un DataFrame para almacenar los resultados de cada bloque
-resultados_por_minuto = pd.DataFrame(columns=['id_lote', 'n_fotogramas', 'valor_min_pred', 'valor_max_pred', 
-                                              'valor_prom_pred', 'id_estado_sm', 'fecha', 'hora_inicio', 'hora_fin', 
-                                              'prob_error_pred', 'id_res_sesion'])
+lote_fotogramas = pd.DataFrame(columns=['id_lote', 'n_fotogramas', 'valor_min_pred', 'valor_max_pred', 
+                                        'valor_prom_pred', 'id_estado_sm', 'fecha', 'hora_inicio', 'hora_fin', 
+                                        'prob_error_pred', 'id_res_sesion'])
 
 # Iterar sobre cada bloque y calcular los valores requeridos
 for bloque, datos in bloques:
-    n_fotogramas = len(datos)
-    valor_min = datos['valor_prediccion'].min()
-    valor_max = datos['valor_prediccion'].max()
-    valor_promedio = datos['valor_prediccion'].mean()
+    n_fotogramas_bloque = len(datos)
+    valor_min_bloque = datos['valor_prediccion'].min()
+    valor_max_bloque = datos['valor_prediccion'].max()
+    valor_promedio_bloque = datos['valor_prediccion'].mean()
 
-    # Calcular la hora de inicio y fin del bloque
     hora_inicio_bloque = datos['hora'].min().strftime('%H:%M:%S')
     hora_fin_bloque = datos['hora'].max().strftime('%H:%M:%S')
+    fecha_bloque = datos['fecha'].iloc[0]
 
-    # Contrastar el valor promedio con los umbrales de inestabilidad que están en el archivo Estado_sm.csv y guardar el id_estado_sm
-    # del estado correspondiente (el que comprenda dentro de sus límites al valor promedio)
-    estados_sm = pd.read_csv('Procesamiento_datos/Datos/Estado_sm.csv')
+    # Encontrar el estado correspondiente al valor promedio
+    id_estado_sm_bloque = estados_sm[(estados_sm['valor_min'] <= valor_promedio_bloque) & 
+                                     (valor_promedio_bloque < estados_sm['valor_max'])]['id_estado_sm'].iloc[0]
 
-    # Verificar las columnas del DataFrame
-    print("Columnas de estados_sm:", estados_sm.columns)
+    # Contar el número de fotogramas en cada estado
+    n_estados = {estado: len(datos[(datos['valor_prediccion'] >= estados_sm.loc[estados_sm['id_estado_sm'] == estado, 'valor_min'].iloc[0]) & 
+                                   (datos['valor_prediccion'] < estados_sm.loc[estados_sm['id_estado_sm'] == estado, 'valor_max'].iloc[0])]) 
+                 for estado in estados_sm['id_estado_sm']}
 
-    id_estado_sm = None
-    for i, estado in estados_sm.iterrows():
-        if estado['valor_min'] <= valor_promedio < estado['valor_max']:
-            id_estado_sm = estado['id_estado_sm']
-            break
-    
-    # Calcular el número de registros por cada estado (almacenado en el archivo "Estado_sm.csv") en el bloque
-    n_estados = datos['estado_detallado'].value_counts()
+    # Estado con mayor cantidad de registros
+    id_estado_mayor = max(n_estados, key=n_estados.get)
+    n_estado_mayor = n_estados[id_estado_mayor]
 
-    # Calcular la probabilidad de error de la prediccion en base a la diferencia entre el número de registros con el estado que menos
-    # se repite y el número total de registros del bloque 
-    prob_error_pred = 1 - n_estados.max() / n_fotogramas
-
+    # Calcular la probabilidad de error de la predicción
+    prob_error_pred_bloque = (n_fotogramas_bloque - n_estado_mayor) / n_fotogramas_bloque
 
     # Guardar los resultados en el DataFrame
-    resultados_por_minuto = resultados_por_minuto.append({'id_lote': bloque, 'n_fotogramas': n_fotogramas, 
-                                                          'valor_min_pred': valor_min, 'valor_max_pred': valor_max, 
-                                                          'valor_prom_pred': valor_promedio, 'id_estado_sm': id_paciente,
-                                                          'fecha': fecha, 'hora_inicio': hora_inicio_bloque, 'hora_fin': hora_fin_bloque,
-                                                          'prob_error_pred': prob_error_pred, 'id_res_sesion': id_res_sesion}, 
-                                                          ignore_index=True)
+    nuevo_lote = pd.DataFrame({
+        'id_lote': [ultimo_id_lote + bloque + 1],
+        'n_fotogramas': [n_fotogramas_bloque],
+        'valor_min_pred': [valor_min_bloque],
+        'valor_max_pred': [valor_max_bloque],
+        'valor_prom_pred': [valor_promedio_bloque],
+        'id_estado_sm': [id_estado_mayor],
+        'fecha': [fecha_bloque],
+        'hora_inicio': [hora_inicio_bloque],
+        'hora_fin': [hora_fin_bloque],
+        'prob_error_pred': [prob_error_pred_bloque],
+        'id_res_sesion': [id_res_sesion]
+    })
+    
+    lote_fotogramas = pd.concat([lote_fotogramas, nuevo_lote], ignore_index=True)
 
 # Guardar los resultados en un archivo CSV llamado "Lote_fotogramas.csv"
-with open('Procesamiento_datos/Datos/Lote_fotogramas.csv', 'a', newline='') as csvfile: 
-    writer = csv.writer(csvfile)
+lote_fotogramas.to_csv('Procesamiento_datos/Datos/Lote_fotogramas.csv', mode='a', index=False, 
+                       header=not ultimo_id_lote >= 0, float_format='%.3f')
 
-    # Escribir los encabezados solo si el archivo está vacío
-    if csvfile.tell() == 0:
-        writer.writerow(['id_lote', 'n_fotogramas', 'valor_min_pred', 'valor_max_pred', 
-                         'valor_prom_pred', 'id_estado_sm', 'fecha', 'hora_inicio', 'hora_fin', 
-                         'prob_error_pred', 'id_res_sesion'])
+# Calcular el porcentaje de frecuencia de cada estado en la sesión completa
+total_fotogramas = resultados_temp.shape[0]
+frecuencia_estados = {estado: len(resultados_temp[(resultados_temp['valor_prediccion'] >= estados_sm.loc[estados_sm['id_estado_sm'] == estado, 'valor_min'].iloc[0]) & 
+                                                  (resultados_temp['valor_prediccion'] < estados_sm.loc[estados_sm['id_estado_sm'] == estado, 'valor_max'].iloc[0])]) / total_fotogramas
+                      for estado in estados_sm['id_estado_sm']}
 
-    # Escribir los datos en el archivo CSV
-    for _, row in resultados_por_minuto.iterrows():
-        writer.writerow(row)
+# Guardar los resultados en un DataFrame
+df_frecuencia_estados = pd.DataFrame({
+    'id_res_sesion': [id_res_sesion] * len(frecuencia_estados),
+    'id_estado_sm': list(frecuencia_estados.keys()),
+    'por_frecuencia': list(frecuencia_estados.values())
+})
 
-# Guardar los resultados en un archivo CSV llamado "Lote_fotogramas.csv"
-#resultados_por_minuto.to_csv('Procesamiento_datos/Datos/Lote_fotogramas.csv', index=False)
+# Guardar los resultados en un archivo CSV llamado "Detalle_resultado.csv"
+df_frecuencia_estados.to_csv('Procesamiento_datos/Datos/Detalle_resultado.csv', mode='a', index=False, 
+                             header=not pd.io.common.file_exists('Procesamiento_datos/Datos/Detalle_resultado.csv'),
+                             float_format='%.2f')
 
-# Calcular el porcentaje de frecuencia de cada estado en la sesión en base a los estados guardados en el archivo "Estado_sm.csv"
-estados_sm = pd.read_csv('Procesamiento_datos/Datos/Estado_sm.csv')
-frecuencia_estados = resultados_temporales['estado_detallado'].value_counts(normalize=True) * 100
-frecuencia_estados = frecuencia_estados.reindex(estados_sm['estado_sm']).fillna(0)
-
-# Guardar los resultados en un archivo CSV llamado "Detalle_resultado.csv" con los campos 'id_res_sesion', 'id_estado_sm', 'por_frecuencia'
-with open('Procesamiento_datos/Datos/Detalle_resultado.csv', 'w', newline='') as csvfile:
-    writer = csv.writer(csvfile)
-
-    # Escribir los encabezados solo si el archivo está vacío
-    if csvfile.tell() == 0:
-        writer.writerow(['id_res_sesion', 'id_estado_sm', 'por_frecuencia'])
-
-    # Escribir los datos en el archivo CSV
-    for id_estado_sm, por_frecuencia in frecuencia_estados.items():
-        writer.writerow([id_res_sesion, id_estado_sm, por_frecuencia])
+print("Procesamiento completado con éxito.")
