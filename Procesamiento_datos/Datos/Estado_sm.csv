@@ -1,0 +1,5 @@
+id_estado_sm,nombre,valor_min,valor_max
+0, "Estable", 0, 0.5
+1, "Inestabilidad leve", 0.5, 0.67
+2, "Inestabilidad moderada", 0.67, 0.83
+3, "Inestabilidad severa", 0.83, 1
