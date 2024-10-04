@@ -117,7 +117,7 @@ while cap.isOpened():
 
             # Guardar resultados en CSV
             current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            write_to_csv('resultados_estado.csv', [current_time, label, pred_value])
+            write_to_csv('Puntos_faciales/Resultados_almacen/resultados_estado.csv', [current_time, label, pred_value])
 
     else:
         print("No se detectaron puntos faciales.")

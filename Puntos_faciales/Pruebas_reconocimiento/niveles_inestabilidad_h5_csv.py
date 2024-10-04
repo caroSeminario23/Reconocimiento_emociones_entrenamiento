@@ -25,18 +25,25 @@ face_mesh = mp_face_mesh.FaceMesh(static_image_mode=False, max_num_faces=1, min_
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
 
-# Iniciar la captura de video desde la cámara web
-cap = cv2.VideoCapture(0)  # 0 indica la cámara predeterminada
+# Ruta del video
+video_path = r'C:\Users\carolina\Documents\VS Code\Reconocimiento_emociones_modelo\Videos\Ansiedad\video19.mp4'
+
+# Iniciar la captura de video desde un archivo
+cap = cv2.VideoCapture(video_path)
 
 if not cap.isOpened():
-    print("Error al abrir la cámara.")
+    print("Error al abrir el video.")
     exit()
 
-print("Cámara iniciada correctamente.")
+print("Video iniciado correctamente.")
+
+# Obtener la tasa de fotogramas (FPS) del video (tasa_fps DP n_predicciones_por_segundo)
+fps = cap.get(cv2.CAP_PROP_FPS)
+print(f"Tasa de fotogramas (FPS): {fps}")
 
 # Obtener las dimensiones de la pantalla
-screen_width = 1920  # Ajusta esto al ancho de tu pantalla
-screen_height = 1080  # Ajusta esto al alto de tu pantalla
+screen_width = 1280  # Ajusta esto al ancho de tu pantalla
+screen_height = 720  # Ajusta esto al alto de tu pantalla
 
 # Función para escribir resultados en CSV
 def write_to_csv(filename, data):
@@ -44,17 +51,14 @@ def write_to_csv(filename, data):
     with open(filename, 'a', newline='') as csvfile:
         writer = csv.writer(csvfile)
         if not file_exists:
-            writer.writerow(['Fecha y Hora', 'Estado', 'Valor de Predicción'])
+            writer.writerow(['Fecha', 'Hora', 'Estado_general', 'Estado_detallado', 'Valor de Prediccion'])
         writer.writerow(data)
 
-while True:
+while cap.isOpened():
     ret, frame = cap.read()
     if not ret:
-        print("Error al leer el frame de la cámara.")
+        print("Error al leer el cuadro del video.")
         break
-
-    # Voltear el frame horizontalmente para un efecto de "espejo"
-    frame = cv2.flip(frame, 1)
 
     # Redimensionar el frame si es más grande que la pantalla
     if frame.shape[1] > screen_width or frame.shape[0] > screen_height:
@@ -100,13 +104,18 @@ while True:
             # Obtener el valor de predicción
             pred_value = output_data[0][0]  # Asumiendo que el modelo devuelve un solo valor
 
-            # Determinar la etiqueta basada en el valor de predicción
             if pred_value < 0.5:
                 label = 'Estable'
-                color = (0, 255, 0)  # Verde para estable
+                color = (0, 255, 0) # Verde para estable
+            elif pred_value >= 0.5 and pred_value < 0.67:
+                label = 'Inestabilidad leve'
+                color = (0, 255, 255) # Amarillo para inestabilidad leve
+            elif pred_value >= 0.67 and pred_value < 0.83:
+                label = 'Inestabilidad moderada'
+                color = (0, 165, 255) # Naranja para inestabilidad moderada
             else:
-                label = 'Inestable'
-                color = (0, 0, 255)  # Rojo para inestable
+                label = 'Inestabilidad severa'
+                color = (0, 0, 255) # Rojo para inestabilidad severa
 
             # Dibujar el rectángulo y la etiqueta en el cuadro
             h, w, _ = frame.shape
@@ -116,14 +125,19 @@ while True:
             cv2.putText(frame, f"{label} ({pred_value:.2f})", (x_min, y_min-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, color, 2)
 
             # Guardar resultados en CSV
-            current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            write_to_csv('resultados_estado_realtime.csv', [current_time, label, pred_value])
+            fecha = datetime.now().strftime("%Y-%m-%d")
+            hora = datetime.now().strftime("%H:%M:%S")
+            estado_general = 'Estable' if pred_value < 0.5 else 'Inestable'
+            estado_detallado = label
+            valor_prediccion = pred_value
+
+            write_to_csv('Puntos_faciales/Resultados_almacen/resultados_estado_detallado.csv', [fecha, hora, estado_general, estado_detallado, valor_prediccion])
 
     else:
         print("No se detectaron puntos faciales.")
 
-    # Mostrar el frame con las detecciones
-    cv2.imshow('Detección de Emociones en Tiempo Real', frame)
+    # Mostrar el cuadro con las detecciones
+    cv2.imshow('Deteccion de Emociones', frame)
 
     # Salir si se presiona la tecla 'q'
     if cv2.waitKey(1) & 0xFF == ord('q'):
@@ -132,3 +146,6 @@ while True:
 # Liberar la captura de video y cerrar todas las ventanas
 cap.release()
 cv2.destroyAllWindows()
+
+# Imprimir nuevamente la tasa de fotogramas (FPS) del video porque a veces se pierde
+print(f"Tasa de fotogramas (FPS): {fps}")
