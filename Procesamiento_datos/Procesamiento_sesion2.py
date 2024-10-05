@@ -101,22 +101,51 @@ lote_fotogramas.to_csv('Procesamiento_datos/Datos/Lote_fotogramas.csv', mode='a'
                        header=not ultimo_id_lote >= 0, float_format='%.3f')
 
 # Calcular el porcentaje de frecuencia de cada estado en la sesión completa
-total_fotogramas = resultados_temp.shape[0]
+from datetime import datetime
 
-frecuencia_estados = {estado: len(resultados_temp[(resultados_temp['valor_prediccion'] >= estados_sm.loc[estados_sm['id_estado_sm'] == estado, 'valor_min'].iloc[0]) & 
-                                                  (resultados_temp['valor_prediccion'] < estados_sm.loc[estados_sm['id_estado_sm'] == estado, 'valor_max'].iloc[0])]) / total_fotogramas
-                      for estado in estados_sm['id_estado_sm']}
+# Convertir las cadenas de hora a objetos datetime
+hora_inicio_dt = datetime.strptime(hora_inicio, '%H:%M:%S')
+hora_fin_dt = datetime.strptime(hora_fin, '%H:%M:%S')
+
+# Calcular la duración de la sesión en minutos
+duracion_sesion = (hora_fin_dt - hora_inicio_dt).total_seconds() / 60
+
+# Leer el archivo "Lote_fotogramas.csv" y asignarlo a una variable llamada "lote_fotogramas"
+lote_fotogramas = pd.read_csv('Procesamiento_datos/Datos/Lote_fotogramas.csv')
+
+# Filtrar los bloques que pertenecen a la sesión actual
+lote_fotogramas_sesion = lote_fotogramas[lote_fotogramas['id_res_sesion'] == id_res_sesion]
+
+# Calcular la duración de cada registro en segundos
+lote_fotogramas_sesion['duracion'] = lote_fotogramas_sesion.apply(
+    lambda row: (datetime.strptime(row['hora_fin'], '%H:%M:%S') - datetime.strptime(row['hora_inicio'], '%H:%M:%S')).total_seconds(),
+    axis=1
+)
+
+# Calcular el porcentaje de frecuencia de cada estado en base a la duración de cada registro
+frecuencia_estados = {}
+for estado in estados_sm['id_estado_sm']:
+    duracion_estado = lote_fotogramas_sesion[lote_fotogramas_sesion['id_estado_sm'] == estado]['duracion'].sum()
+    frecuencia_estados[estado] = duracion_estado / (duracion_sesion * 60)  # Convertir duracion_sesion a segundos
+
+
+
+# Calcular el porcentaje de frecuencia de cada estado en base a los estados de cada 
+# lote de fotogramas (id_estado_sm) y duración que representa (hora_fin - hora_inicio)
+# en minutos
+'''frecuencia_estados = {estado: len(lote_fotogramas_sesion[lote_fotogramas_sesion['id_estado_sm'] == estado]) / duracion_sesion
+                      for estado in estados_sm['id_estado_sm']}'''
 
 # Guardar los resultados en un DataFrame
-df_frecuencia_estados = pd.DataFrame({
+frecuencia_estados_df = pd.DataFrame({
     'id_res_sesion': [id_res_sesion] * len(frecuencia_estados),
     'id_estado_sm': list(frecuencia_estados.keys()),
     'por_frecuencia': list(frecuencia_estados.values())
 })
 
-# Guardar los resultados en un archivo CSV llamado "Detalle_resultado.csv"
-df_frecuencia_estados.to_csv('Procesamiento_datos/Datos/Detalle_resultado.csv', mode='a', index=False, 
-                             header=not pd.io.common.file_exists('Procesamiento_datos/Datos/Detalle_resultado.csv'),
+# Guardar los resultados en un archivo CSV llamado "Detalle_resultado2.csv"
+frecuencia_estados_df.to_csv('Procesamiento_datos/Datos/Detalle_resultado2.csv', mode='a', index=False, 
+                             header=not pd.io.common.file_exists('Procesamiento_datos/Datos/Detalle_resultado2.csv'), 
                              float_format='%.2f')
 
 print("Procesamiento completado con éxito.")
