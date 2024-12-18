@@ -56,5 +56,5 @@ def dividir_carpeta(carpeta_origen, tamano_maximo_mb=100):
 
 # Ejemplo de uso
 if __name__ == "__main__":
-    carpeta_a_dividir = r"C:\Users\carolina\Documents\Proyectos_programacion\Reconocimiento_emociones_modelo\Puntos_faciales\JSON_de_imagenes\Entrenamiento\Inestable"
+    carpeta_a_dividir = r"C:\Users\carolina\Documents\Proyectos_programacion\Reconocimiento_emociones_modelo\Puntos_faciales\JSON_de_imagenes\Validacion\Inestable"
     dividir_carpeta(carpeta_a_dividir)
