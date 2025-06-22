@@ -52,7 +52,7 @@ parso==0.8.4
 pillow==10.4.0
 platformdirs==4.3.6
 prompt_toolkit==3.0.47
-protobuf==4.25.5
+protobuf==4.25.8
 psutil==6.0.0
 pure_eval==0.2.3
 pycparser==2.22
