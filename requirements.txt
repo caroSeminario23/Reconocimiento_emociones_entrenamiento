@@ -14,7 +14,7 @@ decorator==5.1.1
 dlib @ file:///C:/Users/carolina/Documents/VS%20Code/Reconocimiento_emociones_modelo/dlib-19.24.4-cp312-cp312-win_amd64.whl#sha256=2e478a54f50b8ca726c6325a34f0f487061d9528f31e118c7873f460e17924a4
 executing==2.1.0
 flatbuffers==24.3.25
-fonttools==4.53.1
+fonttools==4.61.0
 gast==0.6.0
 google-pasta==0.2.0
 grpcio==1.66.1
