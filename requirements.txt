@@ -19,7 +19,7 @@ gast==0.6.0
 google-pasta==0.2.0
 grpcio==1.66.1
 h5py==3.11.0
-idna==3.10
+idna==3.15
 imutils==0.5.4
 ipykernel==6.29.5
 ipython==8.27.0
